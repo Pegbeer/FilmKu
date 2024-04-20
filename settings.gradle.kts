@@ -15,3 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "FilmKu"
 include(":app")
+include(":data")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

@@ -9,4 +9,7 @@ android{
 dependencies{
     api(libs.kotlin)
     api(libs.bundles.retrofit)
+    api(libs.bundles.koin)
+    testApi(libs.junit)
+    testApi(libs.test.coroutines)
 }

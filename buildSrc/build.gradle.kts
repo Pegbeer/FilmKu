@@ -8,6 +8,7 @@ dependencies {
     //implementation(plugin(libs.plugins.kotlin.symbolProcessing))
     implementation(plugin(libs.plugins.android.application))
     implementation(plugin(libs.plugins.android.library))
+    testImplementation(libs.junit)
 }
 
 kotlin{

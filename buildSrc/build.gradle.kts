@@ -5,6 +5,7 @@ plugins{
 dependencies {
     implementation(plugin(libs.plugins.kotlin.android))
     implementation(plugin(libs.plugins.kotlin.serialization))
+    implementation(plugin(libs.plugins.kotlin.symbol.processing))
     //implementation(plugin(libs.plugins.kotlin.symbolProcessing))
     implementation(plugin(libs.plugins.android.application))
     implementation(plugin(libs.plugins.android.library))

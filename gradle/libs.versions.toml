@@ -4,7 +4,10 @@ kotlin = "1.9.23"
 coroutines = "1.8.0"
 coreKtx = "1.13.0"
 junit = "4.13.2"
+junit-runner = "1.5.2"
 junitVersion = "1.1.5"
+test-annotation = "1.0.1"
+test-core = "1.5.0"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
 material = "1.11.0"
@@ -13,6 +16,7 @@ constraintlayout = "2.1.4"
 serializationJson = "1.6.3"
 jetbrainsKotlinJvm = "1.9.0"
 kotlinCompilerExtensionVersion = "1.5.4"
+kotlinSymbolProcessing = "1.9.23-1.0.20"
 retrofit = "2.11.0"
 retrofit-converter = "2.11.0"
 okhttp = "4.12.0"
@@ -24,6 +28,7 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "junit-runner" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -42,12 +47,15 @@ test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+test-core = { module = "androidx.test:core", version.ref = "test-core" }
+test-annotation = { module = "androidx.test:annotation", version.ref = "test-annotation" }
 
 
 [bundles]
 retrofit = ["retrofit-core", "serialization-json", "okhttp", "okhttpInterceptor","okhttp-mockwebserver","retrofit-converter"]
 koin = ["koin", "koin-test","koin-junit"]
 room = ["room-ktx","room-runtime"]
+test = ["test-annotation","test-core"]
 
 
 [plugins]
@@ -55,5 +63,6 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-symbol-processing = { id = "com.google.devtools.ksp", version.ref = "kotlinSymbolProcessing" }
 jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 

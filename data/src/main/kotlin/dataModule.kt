@@ -1,9 +1,12 @@
+import local.Database
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import org.koin.dsl.module
 import remote.ApiService
 import remote.AuthenticationInterceptor
 import remote.NetworkService
+import repository.Repository
+import repository.RepositoryImpl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -31,4 +34,5 @@ val dataModule = module {
     }
 
     single { NetworkService(get()) }
+
 }

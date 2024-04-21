@@ -14,9 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
-import org.koin.test.inject
 import remote.ApiService
-import remote.NetworkService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -24,7 +22,6 @@ class DataModuleTests : KoinTest {
 
     private lateinit var server: MockWebServer
     private lateinit var api:ApiService
-    private val networkService by inject<NetworkService>()
 
 
     private val type = TypeToken.getParameterized(List::class.java,MovieDto::class.java).type
@@ -58,7 +55,7 @@ class DataModuleTests : KoinTest {
     }
 
     @Before
-    fun before(){
+    fun setUp(){
         server = MockWebServer()
         api = Retrofit.Builder()
             .baseUrl(server.url("/"))
@@ -66,6 +63,8 @@ class DataModuleTests : KoinTest {
             .build()
             .create(ApiService::class.java)
     }
+
+
 
     @Test
     fun `Should serialize and deserialize dto class`(){

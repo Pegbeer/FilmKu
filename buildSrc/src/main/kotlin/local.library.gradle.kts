@@ -1,6 +1,7 @@
 plugins{
     id("com.android.library")
     id("local.kotlin")
+    id("com.google.devtools.ksp")
 }
 
 android {

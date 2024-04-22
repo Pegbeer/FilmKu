@@ -20,6 +20,9 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.google.common.truth.Truth.*
+import me.pegbeer.filmku.remote.NetworkRequest
+
 
 class DataModuleTests {
 
@@ -40,7 +43,6 @@ class DataModuleTests {
             .create(ApiService::class.java)
         remoteDataService = NetworkService(apiService)
     }
-
 
 
     @Test
@@ -110,6 +112,10 @@ class DataModuleTests {
 
         assertEquals(bodyJson,modelJson)
         assertEquals(result.code,200)
+        assertThat(result.data).isNotNull()
+        assertThat(result.data).isInstanceOf(ResponseDto::class.java)
+        assertThat(result.data?.results).isNotEmpty()
+        assertThat(result.data?.results?.get(0)).isInstanceOf(MovieDto::class.java)
     }
 
     @Test
@@ -123,6 +129,50 @@ class DataModuleTests {
         val movieDto = MovieMapper.toMovieDto(DataUtil.movieEntity)
         assertEquals(DataUtil.movieDto,movieDto)
     }
+
+    @Test
+    fun `Remote service should be a children of network request`(){
+        assertThat(remoteDataService).isNotNull()
+        assertThat(remoteDataService).isInstanceOf(NetworkRequest::class.java)
+    }
+
+    @Test
+    fun `Remote service should return a result instance`() = runTest{
+        val modelJson = gson.toJson(DataUtil.responseDto)
+
+        val response = MockResponse()
+        response.setBody(modelJson)
+        response.setResponseCode(200)
+
+        server.enqueue(response)
+
+        val result = remoteDataService.getNowPlayingMovies(1)
+        server.takeRequest()
+
+        assertThat(result).isInstanceOf(Result::class.java)
+    }
+
+    @Test
+    fun `Should return a list of genre dto`() = runTest{
+        val modelJson = gson.toJson(DataUtil.genreResponseDto)
+        val response = MockResponse()
+        response.setBody(modelJson)
+        response.setResponseCode(200)
+
+        server.enqueue(response)
+
+        val result = remoteDataService.downloadGenres()
+        server.takeRequest()
+
+        assertThat(result.status).isEqualTo(Result.Status.SUCCESS)
+        assertThat(result.data).isNotNull()
+        assertThat(result.data).isInstanceOf(GenreResponseDto::class.java)
+        assertThat(result.data).isEqualTo(DataUtil.genreResponseDto)
+        assertThat(result.data?.list).isNotEmpty()
+        assertThat(result.data?.list?.get(0)).isInstanceOf(GenreDto::class.java)
+    }
+
+
 
 
 

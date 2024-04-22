@@ -1,17 +1,18 @@
 package me.pegbeer.filmku.remote
 
+import me.pegbeer.filmku.dto.GenreResponseDto
 import me.pegbeer.filmku.dto.ResponseDto
 import me.pegbeer.filmku.util.Result
 
 class NetworkService(
     private val apiService: ApiService
-) : RemoteDataService{
+) : RemoteDataService, NetworkRequest(){
+
     override suspend fun getNowPlayingMovies(page: Int): Result<ResponseDto>{
-        val response = apiService.getMovies()
-        if(!response.isSuccessful) return Result.error(response.code())
+        return apiService.getMovies().getResult()
+    }
 
-        if(response.body() == null) return Result.error(204)
-
-        return Result.success(response.body()!!)
+    override suspend fun downloadGenres(): Result<GenreResponseDto> {
+        return apiService.getAllGenres().getResult()
     }
 }

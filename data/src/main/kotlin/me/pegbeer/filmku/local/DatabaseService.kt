@@ -1,5 +1,6 @@
 package me.pegbeer.filmku.local
 
+import kotlinx.coroutines.flow.Flow
 import me.pegbeer.filmku.local.entity.GenreEntity
 import me.pegbeer.filmku.local.entity.MovieEntity
 
@@ -18,5 +19,9 @@ class DatabaseService(
 
     override suspend fun insertMovie(movie: MovieEntity):Long {
         return database.movieDao.saveMovie(movie)
+    }
+
+    override fun getAllGenres(): Flow<List<GenreEntity>> {
+        return database.movieDao.getAllGenres()
     }
 }

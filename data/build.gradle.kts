@@ -19,6 +19,7 @@ dependencies{
     testApi(libs.junit)
     testApi(libs.test.coroutines)
     testApi(libs.paging.common)
+    testApi(libs.truth)
 
 
 

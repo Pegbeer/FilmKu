@@ -1,7 +1,6 @@
 package me.pegbeer.filmku
 
 import android.app.Application
-import dataModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext

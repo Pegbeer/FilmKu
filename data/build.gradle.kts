@@ -21,8 +21,11 @@ dependencies{
     testApi(libs.paging.common)
 
 
+
     androidTestImplementation(libs.test.core)
+    androidTestImplementation(libs.test.coroutines)
     androidTestImplementation(libs.truth)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.arch.core.testing)
 }

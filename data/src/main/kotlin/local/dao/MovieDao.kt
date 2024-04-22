@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+import local.entity.GenreEntity
 import local.entity.MovieEntity
 
 @Dao
@@ -14,4 +16,10 @@ interface MovieDao {
 
     @Query("SELECT * FROM movieentity")
     suspend fun getAll():List<MovieEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveAllGenres(genres:List<GenreEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveAllMovies(movies:List<MovieEntity>)
 }

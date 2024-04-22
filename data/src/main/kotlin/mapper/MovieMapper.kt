@@ -8,25 +8,25 @@ class MovieMapper {
 
         fun toMovieDto(movie:MovieEntity):MovieDto{
             return MovieDto(
-                movie.genreIds,
                 movie.id,
                 movie.overview,
                 movie.posterPath,
                 movie.title,
                 movie.voteAverage,
-                movie.originalLanguage
+                movie.genresIds,
+                movie.releaseDate
             )
         }
 
         fun toMovieEntity(movie:MovieDto):MovieEntity{
             return MovieEntity(
                 movie.id,
-                movie.genresIds,
                 movie.overview,
                 movie.posterPath,
+                movie.releaseDate,
                 movie.title,
                 movie.voteAverage,
-                movie.originalLanguage
+                movie.genresIds
             )
         }
     }

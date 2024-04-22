@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieDto(
-    @SerializedName("genre_ids")
-    val genresIds:List<Int>,
     @SerializedName("id")
     val id:Long,
     @SerializedName("overview")
@@ -17,6 +15,8 @@ data class MovieDto(
     val title:String,
     @SerializedName("vote_average")
     val voteAverage:Double,
-    @SerializedName("original_language")
-    val originalLanguage:String
+    @SerializedName("genre_ids")
+    val genresIds:List<Long>,
+    @SerializedName("release_date")
+    val releaseDate:String
 )

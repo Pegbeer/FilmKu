@@ -1,10 +1,13 @@
 import local.Database
+import local.DatabaseService
+import local.LocalDataService
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import org.koin.dsl.module
 import remote.ApiService
 import remote.AuthenticationInterceptor
 import remote.NetworkService
+import remote.RemoteDataService
 import repository.Repository
 import repository.RepositoryImpl
 import retrofit2.Retrofit
@@ -33,6 +36,6 @@ val dataModule = module {
             .build()
     }
 
-    single { NetworkService(get()) }
+    single<RemoteDataService> { NetworkService(get()) }
 
 }

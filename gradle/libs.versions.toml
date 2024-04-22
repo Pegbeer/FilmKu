@@ -22,6 +22,8 @@ retrofit-converter = "2.11.0"
 okhttp = "4.12.0"
 koin = "3.5.6"
 room = "2.6.1"
+paging = "3.2.1"
+truth = "1.4.2"
 
 [libraries]
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -49,6 +51,10 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 test-core = { module = "androidx.test:core", version.ref = "test-core" }
 test-annotation = { module = "androidx.test:annotation", version.ref = "test-annotation" }
+paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
+paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+truth-extensions = { module = "com.google.truth.extensions:truth-java8-extension", version.ref = "truth" }
 
 
 [bundles]
@@ -56,6 +62,7 @@ retrofit = ["retrofit-core", "serialization-json", "okhttp", "okhttpInterceptor"
 koin = ["koin", "koin-test","koin-junit"]
 room = ["room-ktx","room-runtime"]
 test = ["test-annotation","test-core"]
+paging = ["paging-runtime","paging-common"]
 
 
 [plugins]

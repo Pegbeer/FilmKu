@@ -10,10 +10,10 @@ import local.converters.GenreIdsConverter
 data class MovieEntity(
     @PrimaryKey
     val id:Long,
-    val genreIds:List<Int>,
     val overview:String,
     val posterPath:String,
+    val releaseDate:String,
     val title:String,
     val voteAverage:Double,
-    val originalLanguage:String
+    val genresIds:List<Long>
 )

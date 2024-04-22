@@ -1,23 +1,39 @@
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import local.Database
+import local.DatabaseService
+import local.LocalDataService
 import local.entity.MovieEntity
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
+import remote.ApiService
+import remote.NetworkService
+import remote.RemoteDataService
 import repository.Repository
 import repository.RepositoryImpl
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.test.assertEquals
 
 
 class DataModuleTests : KoinTest {
 
-    private lateinit var database: Database
+    private lateinit var server: MockWebServer
     private lateinit var repository: Repository
+    private lateinit var localDataService: LocalDataService
+    private lateinit var remoteDataService: RemoteDataService
+    private lateinit var apiService: ApiService
+
+    private val gson = Gson()
+
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
@@ -27,24 +43,33 @@ class DataModuleTests : KoinTest {
 
     @Before
     fun setUp(){
-        database = createInMemoryDatabase()
-        repository = RepositoryImpl(database)
+        server = MockWebServer()
+        apiService = Retrofit.Builder()
+            .baseUrl(server.url("/"))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+        localDataService = DatabaseService(createInMemoryDatabase())
+        remoteDataService = NetworkService(apiService)
+        repository = RepositoryImpl(localDataService,remoteDataService)
     }
+
+
 
     @Test
     fun shouldSaveAMovieSuccessfully(){
         val movie = MovieEntity(
             1L,
-            listOf(1,2),
+            "",
             "",
             "",
             "",
             1.0,
-            ""
+            listOf(1L)
         )
 
         val result = runBlocking {
-            database.movieDao.saveMovie(movie)
+            localDataService.insertMovie(movie)
         }
 
         assertEquals(movie.id, result)
@@ -53,32 +78,32 @@ class DataModuleTests : KoinTest {
     @Test
     fun shouldReturnAllTheFavoritesMovies(){
         runBlocking {
-            database.movieDao.saveMovie(
+            localDataService.insertMovie(
                 MovieEntity(
                     1L,
-                    listOf(1,2),
+                    "",
                     "",
                     "",
                     "",
                     1.0,
-                    ""
+                    listOf(1L)
                 )
             )
-            database.movieDao.saveMovie(
+            localDataService.insertMovie(
                 MovieEntity(
-                    2L,
-                    listOf(3,4),
+                    1L,
                     "",
                     "",
                     "",
-                    2.0,
-                    ""
+                    "",
+                    1.0,
+                    listOf(1L)
                 )
             )
         }
 
         val result = runBlocking {
-            database.movieDao.getAll()
+            localDataService.getAllMovies()
         }
 
         assert(result.isNotEmpty())
@@ -89,7 +114,8 @@ class DataModuleTests : KoinTest {
 
     @After
     fun dispose(){
-        database.close()
+        stopKoin()
+        server.shutdown()
     }
 
     private fun createInMemoryDatabase(): Database {

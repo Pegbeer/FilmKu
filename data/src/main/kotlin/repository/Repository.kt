@@ -1,9 +1,9 @@
 package repository
 
+import androidx.paging.PagingData
 import dto.MovieDto
+import kotlinx.coroutines.flow.Flow
 
 interface Repository {
-    suspend fun save(movie:MovieDto):Long
-
-    suspend fun getNowPlayingMovies():List<MovieDto>
+    fun getNowPlayingMovies(page:Int):Flow<PagingData<MovieDto>>
 }

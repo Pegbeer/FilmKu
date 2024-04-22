@@ -4,7 +4,9 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import dataModule
 import dto.MovieDto
+import dto.ResponseDto
 import kotlinx.coroutines.test.runTest
+import local.entity.MovieEntity
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -12,56 +14,57 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import remote.ApiService
+import remote.NetworkService
+import remote.RemoteDataService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class DataModuleTests : KoinTest {
 
     private lateinit var server: MockWebServer
-    private lateinit var api:ApiService
+    private lateinit var apiService:ApiService
+    private lateinit var remoteDataService: RemoteDataService
 
 
     private val type = TypeToken.getParameterized(List::class.java,MovieDto::class.java).type
     private val gson = GsonBuilder().create()
-    private val model = MovieDto(
-        listOf(1),
+    private val model = MovieEntity(
         1L,
-        "Lorem ipsum",
-        "google.com",
-        "Batman",
-        9.5,
-        "en-US"
+        "",
+        "",
+        "",
+        "",
+        1.0,
+        listOf(1L)
     )
 
     private val listModel = listOf(
         MovieDto(
-            listOf(878,12),
-            693134L,
-            "Follow the mythic journey of Paul Atreides as he unites with Chani and the Fremen while on a path of revenge against the conspirators who destroyed his family. Facing a choice between the love of his life and the fate of the known universe, Paul endeavors to prevent a terrible future only he can foresee.",
-            "/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
-            "Dune: Part Two",
-            8.292,
-            "en"
+            1L,
+            "",
+            "",
+            "",
+            1.0,
+            listOf(1L),
+            ""
         )
     )
 
-    @get:Rule
-    val koinTestRule = KoinTestRule.create {
-        printLogger()
-        modules(dataModule)
-    }
+    private val modelDto = ResponseDto(1, listModel,1,1)
 
     @Before
     fun setUp(){
         server = MockWebServer()
-        api = Retrofit.Builder()
+        apiService = Retrofit.Builder()
             .baseUrl(server.url("/"))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
+        remoteDataService = NetworkService(apiService)
     }
 
 
@@ -76,47 +79,51 @@ class DataModuleTests : KoinTest {
 
     @Test
     fun `Should return an empty list on error`() = runTest{
-        val dto = emptyList<MovieDto>()
-        val jsonDto = gson.toJson(dto)
+        val emptyDto = emptyList<MovieDto>()
+        val emptyJsonDto = gson.toJson(emptyDto)
+        val jsonDto = gson.toJson(modelDto)
 
         val response = MockResponse()
-        response.setBody(jsonDto)
-        response.setResponseCode(404)
+        response.setBody(emptyJsonDto)
+        response.setResponseCode(400)
         server.enqueue(response)
 
-        val data = api.getNowPlayingMovies()
+        val data = remoteDataService.getNowPlayingMovies()
         server.takeRequest()
 
-        val bodyJson = gson.toJson(data.body().orEmpty())
+        val bodyJson = gson.toJson(data.data)
 
-        assertEquals(data.body().orEmpty(),dto)
+        assertEquals(data.data?.results,emptyDto)
         assertEquals(bodyJson,jsonDto)
-        assertEquals(data.code(),404)
+        assertEquals(data.code,400)
     }
 
     @Test
     fun `Should return a list of movies`() = runTest {
-        val listModelJson = gson.toJson(listModel,type)
+
+
+        val modelJson = gson.toJson(modelDto)
 
         val response = MockResponse()
-        response.setBody(listModelJson)
+        response.setBody(modelJson)
         response.setResponseCode(200)
 
         server.enqueue(response)
 
-        val data = api.getNowPlayingMovies()
+        val result = remoteDataService.getNowPlayingMovies()
         server.takeRequest()
 
-        val bodyJson = gson.toJson(data.body().orEmpty())
+        val bodyJson = gson.toJson(result.data)
 
-        assertEquals(listModelJson,bodyJson)
-        assertEquals(data.code(),200)
+        assertEquals(bodyJson,modelJson)
+        assertEquals(result.code,200)
     }
 
 
 
     @After
     fun after(){
+        stopKoin()
         server.shutdown()
     }
 

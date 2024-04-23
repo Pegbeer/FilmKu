@@ -1,17 +1,17 @@
+package me.pegbeer.filmku
+
+import me.pegbeer.filmku.remote.AuthenticationInterceptor
+import me.pegbeer.filmku.remote.NetworkService
+import me.pegbeer.filmku.remote.RemoteDataService
 import okhttp3.OkHttpClient
-import okhttp3.mockwebserver.MockWebServer
 import org.koin.dsl.module
-import remote.ApiService
-import remote.AuthenticationInterceptor
-import remote.NetworkService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val dataModule = module {
-    val baseUrl = "https://api.themoviedb.org/"
+private const val baseUrl = "https://api.themoviedb.org/"
 
-    single { get<Retrofit>().create(ApiService::class.java)  }
+val dataModule = module {
 
     single {
         OkHttpClient.Builder()
@@ -30,5 +30,6 @@ val dataModule = module {
             .build()
     }
 
-    single { NetworkService(get()) }
+    single<RemoteDataService> { NetworkService(get()) }
+
 }

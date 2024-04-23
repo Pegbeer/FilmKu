@@ -1,6 +1,7 @@
 plugins{
     id("com.android.library")
     id("local.kotlin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -14,7 +15,7 @@ android {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        //consumerProguardFiles("consumer-rules.pro")
     }
 
     @Suppress("UnstableApiUsage")

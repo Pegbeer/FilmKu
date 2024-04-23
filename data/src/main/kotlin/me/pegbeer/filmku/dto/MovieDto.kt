@@ -1,12 +1,10 @@
-package dto
+package me.pegbeer.filmku.dto
 
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieDto(
-    @SerializedName("genre_ids")
-    val genresIds:List<Int>,
     @SerializedName("id")
     val id:Long,
     @SerializedName("overview")
@@ -17,6 +15,10 @@ data class MovieDto(
     val title:String,
     @SerializedName("vote_average")
     val voteAverage:Double,
+    @SerializedName("genre_ids")
+    val genresIds:List<Long>,
+    @SerializedName("release_date")
+    val releaseDate:String,
     @SerializedName("original_language")
-    val originalLanguage:String
+    val language:String
 )

@@ -1,4 +1,4 @@
-package remote
+package me.pegbeer.filmku.remote
 
 import okhttp3.Interceptor
 import okhttp3.Response

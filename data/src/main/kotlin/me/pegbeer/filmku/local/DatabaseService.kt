@@ -3,6 +3,7 @@ package me.pegbeer.filmku.local
 import kotlinx.coroutines.flow.Flow
 import me.pegbeer.filmku.local.entity.GenreEntity
 import me.pegbeer.filmku.local.entity.MovieEntity
+import me.pegbeer.filmku.local.entity.MovieWithGenres
 
 class DatabaseService(
     private val database: Database
@@ -23,5 +24,9 @@ class DatabaseService(
 
     override fun getAllGenres(): Flow<List<GenreEntity>> {
         return database.movieDao.getAllGenres()
+    }
+
+    override suspend fun getMovieWithGenres(id: Long): MovieWithGenres? {
+        return database.movieDao.getMovieById(id)
     }
 }

@@ -14,7 +14,8 @@ class MovieMapper {
                 movie.title,
                 movie.voteAverage,
                 movie.genresIds,
-                movie.releaseDate
+                movie.releaseDate,
+                movie.language
             )
         }
 
@@ -26,7 +27,8 @@ class MovieMapper {
                 movie.releaseDate,
                 movie.title,
                 movie.voteAverage,
-                movie.genresIds
+                movie.genresIds,
+                movie.language
             )
         }
     }

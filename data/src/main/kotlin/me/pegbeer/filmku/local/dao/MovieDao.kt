@@ -4,9 +4,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import me.pegbeer.filmku.local.entity.GenreEntity
 import me.pegbeer.filmku.local.entity.MovieEntity
+import me.pegbeer.filmku.local.entity.MovieWithGenres
 
 @Dao
 interface MovieDao {
@@ -25,4 +27,9 @@ interface MovieDao {
 
     @Query("SELECT * FROM genreentity")
     fun getAllGenres():Flow<List<GenreEntity>>
+
+
+    @Transaction
+    @Query("SELECT * FROM movieentity WHERE id = :id")
+    suspend fun getMovieById(id:Long):MovieWithGenres?
 }

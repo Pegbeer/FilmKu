@@ -15,5 +15,6 @@ data class MovieEntity(
     val releaseDate:String,
     val title:String,
     val voteAverage:Double,
-    val genresIds:List<Long>
+    val genresIds:List<Long>,
+    val language:String
 )

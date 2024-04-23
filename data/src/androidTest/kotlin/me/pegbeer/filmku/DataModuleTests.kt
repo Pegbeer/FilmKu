@@ -11,6 +11,7 @@ import me.pegbeer.filmku.remote.NetworkService
 import me.pegbeer.filmku.remote.RemoteDataService
 import me.pegbeer.filmku.repository.Repository
 import me.pegbeer.filmku.repository.RepositoryImpl
+import me.pegbeer.filmku.util.DataUtil
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
@@ -48,21 +49,12 @@ class DataModuleTests  {
 
     @Test
     fun shouldSaveAMovieSuccessfully(){
-        val movie = MovieEntity(
-            1L,
-            "",
-            "",
-            "",
-            "",
-            1.0,
-            listOf(1L)
-        )
 
         val result = runBlocking {
-            localDataService.insertMovie(movie)
+            localDataService.insertMovie(DataUtil.movieEntity)
         }
 
-        assertEquals(movie.id, result)
+        assertEquals(DataUtil.movieEntity.id, result)
     }
 
     @Test
@@ -76,18 +68,20 @@ class DataModuleTests  {
                     "",
                     "",
                     1.0,
-                    listOf(1L)
+                    listOf(1L),
+                    ""
                 )
             )
             localDataService.insertMovie(
                 MovieEntity(
-                    1L,
+                    2L,
                     "",
                     "",
                     "",
                     "",
                     1.0,
-                    listOf(1L)
+                    listOf(1L),
+                    ""
                 )
             )
         }
@@ -97,7 +91,7 @@ class DataModuleTests  {
         }
 
         assert(result.isNotEmpty())
-        assertEquals(result.size, 1)
+        assertEquals(result.size, 2)
     }
 
 

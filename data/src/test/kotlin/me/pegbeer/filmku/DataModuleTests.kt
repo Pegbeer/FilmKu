@@ -22,6 +22,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.google.common.truth.Truth.*
 import me.pegbeer.filmku.remote.NetworkRequest
+import me.pegbeer.filmku.util.SortBy
 
 
 class DataModuleTests {
@@ -87,7 +88,7 @@ class DataModuleTests {
         response.setResponseCode(400)
         server.enqueue(response)
 
-        val result = remoteDataService.getNowPlayingMovies()
+        val result = remoteDataService.getMovies(1,SortBy.Popular)
         server.takeRequest()
 
         assertEquals(result.data?.results,null)
@@ -105,7 +106,7 @@ class DataModuleTests {
 
         server.enqueue(response)
 
-        val result = remoteDataService.getNowPlayingMovies()
+        val result = remoteDataService.getMovies(1,SortBy.Popular)
         server.takeRequest()
 
         val bodyJson = gson.toJson(result.data)
@@ -146,30 +147,10 @@ class DataModuleTests {
 
         server.enqueue(response)
 
-        val result = remoteDataService.getNowPlayingMovies(1)
+        val result = remoteDataService.getMovies(1, SortBy.Popular)
         server.takeRequest()
 
         assertThat(result).isInstanceOf(Result::class.java)
-    }
-
-    @Test
-    fun `Should return a list of genre dto`() = runTest{
-        val modelJson = gson.toJson(DataUtil.genreResponseDto)
-        val response = MockResponse()
-        response.setBody(modelJson)
-        response.setResponseCode(200)
-
-        server.enqueue(response)
-
-        val result = remoteDataService.downloadGenres()
-        server.takeRequest()
-
-        assertThat(result.status).isEqualTo(Result.Status.SUCCESS)
-        assertThat(result.data).isNotNull()
-        assertThat(result.data).isInstanceOf(GenreResponseDto::class.java)
-        assertThat(result.data).isEqualTo(DataUtil.genreResponseDto)
-        assertThat(result.data?.list).isNotEmpty()
-        assertThat(result.data?.list?.get(0)).isInstanceOf(GenreDto::class.java)
     }
 
 

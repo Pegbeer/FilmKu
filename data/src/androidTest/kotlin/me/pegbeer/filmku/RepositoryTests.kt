@@ -59,26 +59,6 @@ class RepositoryTests {
         repository = RepositoryImpl(localDataService,remoteDataService)
     }
 
-    @Test
-    fun shouldSaveGenresSuccessfully() = runTest{
-        val responseJson = gson.toJson(DataUtil.genreResponseDto)
-        val response = MockResponse()
-        response.setBody(responseJson)
-        response.setResponseCode(200)
-        server.enqueue(response)
-
-        val result = async {
-            repository.saveGenres()
-        }
-        val request = server.takeRequest(300L,TimeUnit.MILLISECONDS)
-        val data = if(request == null) result.await() else null
-
-        assertThat(data).isNotNull()
-        assertThat(data).isInstanceOf(Result::class.java)
-        assertThat(data?.data).isNotEmpty()
-        assertThat(data?.data).isEqualTo(DataUtil.genresEntities)
-    }
-
 
     @Test
     fun getNowPlayingMoviesReturnsFlowOfPagingData() = runTest{
@@ -120,44 +100,6 @@ class RepositoryTests {
         assertThat(data?.status).isEqualTo(Result.Status.SUCCESS)
         assertThat(data?.data).isNotNull()
         assertThat(data?.data).isEqualTo(DataUtil.movieDetailDto)
-    }
-
-
-
-    fun shouldReturnAMovieDetail() = runTest {
-        server.enqueue(MockResponse().setBody(gson.toJson(DataUtil.genreResponseDto)).setResponseCode(200))
-        server.enqueue(MockResponse().setBody(gson.toJson(DataUtil.responseDto)).setResponseCode(200))
-        server.enqueue(MockResponse().setBody(gson.toJson(DataUtil.movieDetailDto)).setResponseCode(200))
-
-
-        val genresData = runBlocking { repository.saveGenres() }
-        val pagingData = runBlocking { repository.getNowPlayingMovies(1).first() }
-        val movieDetailData = runBlocking { repository.getMovieDetail(1L) }
-
-
-        val genresRequest = server.takeRequest(100L, TimeUnit.MILLISECONDS)
-        val pagingRequest = server.takeRequest(100L, TimeUnit.MILLISECONDS)
-        val movieDetailRequest = server.takeRequest(100L, TimeUnit.MILLISECONDS)
-
-
-        assertThat(genresRequest).isNotNull()
-        assertThat(pagingRequest).isNotNull()
-        assertThat(movieDetailRequest).isNotNull()
-
-        assertThat(genresData).isNotNull()
-        assertThat(genresData.data).isNotNull()
-        assertThat(genresData.data).isNotEmpty()
-        assertThat(genresData.status).isEqualTo(Result.Status.SUCCESS)
-        assertThat(genresData.data).isEqualTo(DataUtil.genresEntities)
-
-        assertThat(pagingData).isNotNull()
-        assertThat(pagingData).isInstanceOf(PagingData::class.java)
-
-        assertThat(movieDetailData).isNotNull()
-        assertThat(movieDetailData.data).isNotNull()
-        assertThat(movieDetailData.status).isEqualTo(Result.Status.SUCCESS)
-        assertThat(movieDetailData.data?.cast).isNotEmpty()
-        assertThat(movieDetailData.data?.genres).isNotEmpty()
     }
 
 

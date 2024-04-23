@@ -25,6 +25,11 @@ room = "2.6.1"
 paging = "3.2.1"
 truth = "1.4.2"
 arch = "2.2.0"
+navigation = "2.5.0"
+glide = "4.16.0"
+apache-commons = "3.12.0"
+threeTenABP = "1.4.6"
+
 
 [libraries]
 kotlin = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -35,6 +40,8 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "junit-r
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "arch" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-navigation-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -57,6 +64,9 @@ paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pag
 paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 truth-extensions = { module = "com.google.truth.extensions:truth-java8-extension", version.ref = "truth" }
+glide = { module = "com.github.bumptech.glide:glide",version.ref = "glide" }
+apache-commons = { module = "org.apache.commons:commons-lang3", version.ref = "apache-commons" }
+threeTenABP = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threeTenABP" }
 
 
 [bundles]
@@ -65,6 +75,7 @@ koin = ["koin", "koin-test","koin-junit"]
 room = ["room-ktx","room-runtime"]
 test = ["test-annotation","test-core"]
 paging = ["paging-runtime","paging-common"]
+navigation = ["androidx-navigation-ktx","androidx-navigation-ui"]
 
 
 [plugins]

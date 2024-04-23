@@ -53,5 +53,5 @@ object DataUtil {
 
     val creditsDto = CreditsDto(listOf(castDto))
 
-    val movieDetailDto = MovieDetailDto(1L,120, creditsDto)
+    val movieDetailDto = MovieDetailDto(1L,"","","",1.0,60,"", "",creditsDto,"", genreResponseDto.genres)
 }

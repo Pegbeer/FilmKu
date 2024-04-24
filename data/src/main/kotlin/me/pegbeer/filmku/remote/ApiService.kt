@@ -23,7 +23,7 @@ interface ApiService {
         @Query("sort_by")sortBy:String
     ):Response<ResponseDto>
 
-    @GET("/3/movie/{id}?append_to_response=credits")
+    @GET("/3/movie/{id}?append_to_response=credits,videos")
     suspend fun getMovieDetail(
         @Path("id")id:Long
     ):Response<MovieDetailDto>

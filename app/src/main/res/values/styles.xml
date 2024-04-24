@@ -6,6 +6,12 @@
         <item name="android:fontFamily">@font/merriweather_black</item>
     </style>
 
+    <style name="subtitle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:fontFamily">@font/merriweather_black</item>
+    </style>
+
     <style name="seeMoreButton">
         <item name="android:textSize">12sp</item>
         <item name="background">@drawable/see_more_button_background</item>

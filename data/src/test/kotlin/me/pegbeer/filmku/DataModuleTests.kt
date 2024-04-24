@@ -21,8 +21,16 @@ import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.google.common.truth.Truth.*
+import com.google.gson.Gson
+import me.pegbeer.filmku.dto.MovieDetailDeserializer
+import me.pegbeer.filmku.dto.MovieDetailDto
 import me.pegbeer.filmku.remote.NetworkRequest
 import me.pegbeer.filmku.util.SortBy
+import org.koin.test.KoinTest
+import java.io.InputStreamReader
+import java.io.Reader
+import java.nio.charset.Charset
+import java.nio.charset.CharsetDecoder
 
 
 class DataModuleTests {
@@ -32,14 +40,16 @@ class DataModuleTests {
     private lateinit var remoteDataService: RemoteDataService
 
 
-    private val gson = GsonBuilder().create()
+    private val gson = GsonBuilder()
+                        .registerTypeAdapter(MovieDetailDto::class.java, MovieDetailDeserializer())
+                        .create()
 
     @Before
     fun setUp(){
         server = MockWebServer()
         apiService = Retrofit.Builder()
             .baseUrl(server.url("/"))
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ApiService::class.java)
         remoteDataService = NetworkService(apiService)
@@ -76,6 +86,14 @@ class DataModuleTests {
         val deserializedJson = gson.fromJson(jsonString, ResponseDto::class.java)
 
         assertEquals(DataUtil.responseDto,deserializedJson)
+    }
+
+    @Test
+    fun `Should deserialize movie detail dto class`(){
+        val input = javaClass.classLoader?.getResourceAsStream("movie_detail_dto_dummy_data.json")
+        val reader = InputStreamReader(input, Charsets.UTF_8)
+        val deserializedJson = gson.fromJson(reader,MovieDetailDto::class.java)
+        assertEquals(deserializedJson,DataUtil.movieDetailDto)
     }
 
     @Test

@@ -15,23 +15,24 @@ import me.pegbeer.filmku.util.toHourMinuteString
 
 class RegularMovieListAdapter(
     private val type: Int,
-    private val onClick: (MovieWithGenres) -> Unit
+    private val onClick: (Long) -> Unit
 ) : ListAdapter<MovieDetail,RegularMovieListAdapter.ViewHolder>(MovieDiffCallback()) {
 
     class ViewHolder(private val binding:ViewBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bindVertical(item: MovieDetail?, onClick:(MovieWithGenres) -> Unit) {
+        fun bindVertical(item: MovieDetail?, onClick:(Long) -> Unit) {
             (binding as MovieVerticalCardBinding).apply {
                 if(item != null){
                     movie = item
                     Glide.with(root).load(
                         root.resources.getString(R.string.imageUrl,item.posterPath)
                     ).into(movieImageView)
+                    root.setOnClickListener { onClick(item.id) }
                 }
                 executePendingBindings()
             }
         }
 
-        fun bindHorizontal(item: MovieDetail?,onClick:(MovieWithGenres) -> Unit) {
+        fun bindHorizontal(item: MovieDetail?,onClick:(Long) -> Unit) {
             val genreListAdapter = GenreListAdapter()
             (binding as MovieHorizontalCardBinding).apply {
                 if(item != null){
@@ -46,6 +47,7 @@ class RegularMovieListAdapter(
                     Glide.with(root)
                         .load(root.resources.getString(R.string.imageUrl,item.posterPath))
                         .into(moviePosterImageView)
+                    root.setOnClickListener { onClick(item.id) }
                 }
                 executePendingBindings()
             }

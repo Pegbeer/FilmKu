@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.apache.commons)
     implementation(libs.threeTenABP)
+    implementation(libs.skeleton.layout)
+    implementation(libs.youtube.player)
 
     testImplementation(libs.junit)
 

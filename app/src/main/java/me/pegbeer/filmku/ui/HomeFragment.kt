@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
@@ -27,10 +28,6 @@ class HomeFragment : Fragment() {
 
     private val nowPlayingAdapter = MovieListAdapter(0,::onMovieClicked)
     private val popularAdapter = RegularMovieListAdapter(1,::onMovieClicked)
-
-    private fun onMovieClicked(movieWithGenres: MovieWithGenres) {
-
-    }
 
 
     override fun onCreateView(
@@ -74,8 +71,12 @@ class HomeFragment : Fragment() {
                 when(it.status){
                     Result.Status.SUCCESS->{
                         popularAdapter.submitList(it.data)
+                        binding.homeSkeletonLayout.showOriginal()
                     }
-                    else ->{
+                    Result.Status.LOADING ->{
+                        binding.homeSkeletonLayout.showSkeleton()
+                    }
+                    Result.Status.ERROR ->{
                         AlertDialog.Builder(requireContext())
                             .setTitle("Warning")
                             .setMessage("An error occurred processing the request")
@@ -85,6 +86,14 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun onMovieClicked(movieId:Long) {
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailFragment(movieId))
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
 

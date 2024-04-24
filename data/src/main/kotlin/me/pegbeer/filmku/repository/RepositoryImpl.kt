@@ -35,7 +35,7 @@ class RepositoryImpl(
         pagingSourceFactory = { MoviePagingSource(local,network,SortBy.NowPlaying,page) }
     ).flow
 
-    override suspend fun getMovieDetail(id: Long): Result<MovieDetail?> {
+    override suspend fun getMovieDetail(id: Long): Result<MovieDetail> {
         val movieDetailDto = network.getMovieDetails(id)
         if(movieDetailDto.status != Result.Status.SUCCESS) return Result.error(movieDetailDto.code!!)
         val movieDetail = MovieDetailMapper.toMovieDetail(movieDetailDto.data!!)
@@ -43,6 +43,7 @@ class RepositoryImpl(
     }
 
     override fun getPopularMovies(): Flow<Result<List<MovieDetail>>> = flow {
+        emit(Result.loading())
         val result = network.getMovies(sortBy = SortBy.TopRated)
         when(result.status){
             Result.Status.SUCCESS ->{

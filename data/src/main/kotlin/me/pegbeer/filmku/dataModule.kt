@@ -1,6 +1,9 @@
 package me.pegbeer.filmku
 
 import androidx.room.Room
+import com.google.gson.GsonBuilder
+import me.pegbeer.filmku.dto.MovieDetailDeserializer
+import me.pegbeer.filmku.dto.MovieDetailDto
 import me.pegbeer.filmku.local.Database
 import me.pegbeer.filmku.local.DatabaseService
 import me.pegbeer.filmku.local.LocalDataService
@@ -29,10 +32,16 @@ val dataModule = module {
             .build()
     }
 
+    single {
+        GsonBuilder()
+        .registerTypeAdapter(MovieDetailDto::class.java, MovieDetailDeserializer())
+        .create()
+    }
+
     single<ApiService> {
         Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(get()))
             .client(get())
             .build()
             .create(ApiService::class.java)

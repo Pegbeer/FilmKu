@@ -11,5 +11,5 @@ import me.pegbeer.filmku.util.Result
 interface Repository {
     fun getNowPlayingMovies(page:Int = 1):Flow<PagingData<MovieDetail>>
     fun getPopularMovies():Flow<Result<List<MovieDetail>>>
-    suspend fun getMovieDetail(id:Long):Result<MovieDetail?>
+    suspend fun getMovieDetail(id:Long):Result<MovieDetail>
 }

@@ -41,7 +41,7 @@ class MoviePagingSource(
                         MovieDetail(
                             it.id,0,it.title,it.overview,
                             it.posterPath,it.releaseDate,it.voteAverage,it.language,
-                            emptyList(), emptyList()
+                            "", emptyList(), emptyList()
                         )
                     }
                 },

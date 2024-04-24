@@ -13,6 +13,7 @@ data class MovieDetail(
     val releaseDate:String,
     val voteRating:Double,
     val language:String,
+    val videoKey:String,
     val genres:List<GenreDto>,
     val cast:List<CastDto>
 )

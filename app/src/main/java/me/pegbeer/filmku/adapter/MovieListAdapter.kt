@@ -17,7 +17,7 @@ import me.pegbeer.filmku.model.MovieDetail
 import me.pegbeer.filmku.util.toHourMinuteString
 import org.koin.android.ext.android.get
 
-class MovieListAdapter(private val type: Int, private val movieClickListener: (MovieWithGenres) -> Unit) :
+class MovieListAdapter(private val type: Int, private val movieClickListener: (Long) -> Unit) :
     PagingDataAdapter<MovieDetail, MovieListAdapter.ViewHolder>(MovieDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when(type) {
@@ -38,7 +38,7 @@ class MovieListAdapter(private val type: Int, private val movieClickListener: (M
 
     class ViewHolder private constructor(private val binding: ViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bindVertical(item: MovieDetail?, onClick:(MovieWithGenres) -> Unit) {
+        fun bindVertical(item: MovieDetail?, onClick:(Long) -> Unit) {
             (binding as MovieVerticalCardBinding).apply {
                 if(item != null){
                     movie = item
@@ -47,12 +47,13 @@ class MovieListAdapter(private val type: Int, private val movieClickListener: (M
                         root.resources.getString(R.string.imageUrl,item.posterPath))
                         .override(movieImageView.width,movieImageView.height)
                         .into(movieImageView)
+                    root.setOnClickListener { onClick(item.id) }
                 }
                 executePendingBindings()
             }
         }
 
-        fun bindHorizontal(item: MovieDetail?,onClick:(MovieWithGenres) -> Unit) {
+        fun bindHorizontal(item: MovieDetail?,onClick:(Long) -> Unit) {
             val genreListAdapter = GenreListAdapter()
             (binding as MovieHorizontalCardBinding).apply {
                 if(item != null){
@@ -65,6 +66,7 @@ class MovieListAdapter(private val type: Int, private val movieClickListener: (M
                         .override(moviePosterImageView.width,moviePosterImageView.height)
                         .into(moviePosterImageView)
                     movieLength.text = item.length.toHourMinuteString()
+                    root.setOnClickListener { onClick(item.id) }
                 }
                 executePendingBindings()
             }

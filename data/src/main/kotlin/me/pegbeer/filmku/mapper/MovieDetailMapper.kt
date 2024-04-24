@@ -17,8 +17,9 @@ class MovieDetailMapper {
                 movieDetailDto.releaseDate,
                 movieDetailDto.voteAverage,
                 movieDetailDto.language,
+                movieDetailDto.videoKey,
                 movieDetailDto.genres,
-                movieDetailDto.credits.cast
+                movieDetailDto.cast
             )
         }
 
@@ -32,6 +33,7 @@ class MovieDetailMapper {
                 movieDetailDto.releaseDate,
                 movieDetailDto.voteAverage,
                 movieDetailDto.language,
+                "",
                 emptyList(),
                 emptyList()
             )

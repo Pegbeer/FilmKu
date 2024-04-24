@@ -1,14 +1,21 @@
 package me.pegbeer.filmku.dto
 
+import android.icu.text.CaseMap.Title
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
-@Serializable
+
 data class MovieDetailDto(
-    @SerializedName("id")
     val id:Long,
-    @SerializedName("runtime")
+    val overview:String,
+    val posterPath:String,
+    val title:String?,
+    val voteAverage:Double,
     val length:Int,
-    @SerializedName("credits")
-    val credits:CreditsDto
+    val language:String,
+    val originalTitle:String,
+    val releaseDate:String,
+    val videoKey:String,
+    val cast:List<CastDto>,
+    val genres:List<GenreDto>
 )

@@ -9,7 +9,7 @@ class AuthenticationInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val requestBuilder = originalRequest.newBuilder()
-            .addHeader("Authorization","bearer $ACCESS_TOKEN")
+            .addHeader("Authorization","Bearer $ACCESS_TOKEN")
 
         val request = requestBuilder.build()
         return chain.proceed(request)

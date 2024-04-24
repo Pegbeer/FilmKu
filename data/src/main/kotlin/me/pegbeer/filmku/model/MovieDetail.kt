@@ -1,6 +1,7 @@
 package me.pegbeer.filmku.model
 
 import me.pegbeer.filmku.dto.CastDto
+import me.pegbeer.filmku.dto.GenreDto
 import me.pegbeer.filmku.local.entity.GenreEntity
 
 data class MovieDetail(
@@ -12,6 +13,7 @@ data class MovieDetail(
     val releaseDate:String,
     val voteRating:Double,
     val language:String,
-    val genres:List<GenreEntity>,
+    val videoKey:String,
+    val genres:List<GenreDto>,
     val cast:List<CastDto>
 )

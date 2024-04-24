@@ -1,5 +1,13 @@
 package me.pegbeer.filmku.util
 
+
+enum class SortBy(val value:String,val displayName:String){
+    NowPlaying("",""),
+    Popular("popularity.desc","Popularity"),
+    TopRated("vote_count.desc","Top Rated"),
+    Upcoming("release_date.desc","Upcoming")
+}
+
 data class Result<out T>(val status:Status, val data:T?, val code:Int?){
 
     enum class Status{

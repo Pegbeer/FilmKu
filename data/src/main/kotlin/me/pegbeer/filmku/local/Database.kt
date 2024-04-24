@@ -7,7 +7,7 @@ import me.pegbeer.filmku.local.entity.GenreEntity
 import me.pegbeer.filmku.local.entity.MovieEntity
 
 @Database(
-    entities = [MovieEntity::class,GenreEntity::class,],
+    entities = [MovieEntity::class,GenreEntity::class],
     version = 1,
     exportSchema = false
 )

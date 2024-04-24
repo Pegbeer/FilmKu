@@ -21,7 +21,16 @@ import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.google.common.truth.Truth.*
+import com.google.gson.Gson
+import me.pegbeer.filmku.dto.MovieDetailDeserializer
+import me.pegbeer.filmku.dto.MovieDetailDto
 import me.pegbeer.filmku.remote.NetworkRequest
+import me.pegbeer.filmku.util.SortBy
+import org.koin.test.KoinTest
+import java.io.InputStreamReader
+import java.io.Reader
+import java.nio.charset.Charset
+import java.nio.charset.CharsetDecoder
 
 
 class DataModuleTests {
@@ -31,14 +40,16 @@ class DataModuleTests {
     private lateinit var remoteDataService: RemoteDataService
 
 
-    private val gson = GsonBuilder().create()
+    private val gson = GsonBuilder()
+                        .registerTypeAdapter(MovieDetailDto::class.java, MovieDetailDeserializer())
+                        .create()
 
     @Before
     fun setUp(){
         server = MockWebServer()
         apiService = Retrofit.Builder()
             .baseUrl(server.url("/"))
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(ApiService::class.java)
         remoteDataService = NetworkService(apiService)
@@ -78,6 +89,14 @@ class DataModuleTests {
     }
 
     @Test
+    fun `Should deserialize movie detail dto class`(){
+        val input = javaClass.classLoader?.getResourceAsStream("movie_detail_dto_dummy_data.json")
+        val reader = InputStreamReader(input, Charsets.UTF_8)
+        val deserializedJson = gson.fromJson(reader,MovieDetailDto::class.java)
+        assertEquals(deserializedJson,DataUtil.movieDetailDto)
+    }
+
+    @Test
     fun `Should return an 400 code on error`() = runTest{
         val emptyDto = emptyList<MovieDto>()
         val emptyJsonDto = gson.toJson(emptyDto)
@@ -87,7 +106,7 @@ class DataModuleTests {
         response.setResponseCode(400)
         server.enqueue(response)
 
-        val result = remoteDataService.getNowPlayingMovies()
+        val result = remoteDataService.getMovies(1,SortBy.Popular)
         server.takeRequest()
 
         assertEquals(result.data?.results,null)
@@ -105,7 +124,7 @@ class DataModuleTests {
 
         server.enqueue(response)
 
-        val result = remoteDataService.getNowPlayingMovies()
+        val result = remoteDataService.getMovies(1,SortBy.Popular)
         server.takeRequest()
 
         val bodyJson = gson.toJson(result.data)
@@ -146,30 +165,10 @@ class DataModuleTests {
 
         server.enqueue(response)
 
-        val result = remoteDataService.getNowPlayingMovies(1)
+        val result = remoteDataService.getMovies(1, SortBy.Popular)
         server.takeRequest()
 
         assertThat(result).isInstanceOf(Result::class.java)
-    }
-
-    @Test
-    fun `Should return a list of genre dto`() = runTest{
-        val modelJson = gson.toJson(DataUtil.genreResponseDto)
-        val response = MockResponse()
-        response.setBody(modelJson)
-        response.setResponseCode(200)
-
-        server.enqueue(response)
-
-        val result = remoteDataService.downloadGenres()
-        server.takeRequest()
-
-        assertThat(result.status).isEqualTo(Result.Status.SUCCESS)
-        assertThat(result.data).isNotNull()
-        assertThat(result.data).isInstanceOf(GenreResponseDto::class.java)
-        assertThat(result.data).isEqualTo(DataUtil.genreResponseDto)
-        assertThat(result.data?.list).isNotEmpty()
-        assertThat(result.data?.list?.get(0)).isInstanceOf(GenreDto::class.java)
     }
 
 

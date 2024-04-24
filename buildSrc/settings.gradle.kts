@@ -13,6 +13,7 @@ dependencyResolutionManagement {
         mavenCentral()
         gradlePluginPortal()
         google()
+        maven("https://jitpack.io")
     }
 
     versionCatalogs {

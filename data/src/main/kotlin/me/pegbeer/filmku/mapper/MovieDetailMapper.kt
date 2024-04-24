@@ -1,23 +1,41 @@
 package me.pegbeer.filmku.mapper
 
 import me.pegbeer.filmku.dto.MovieDetailDto
+import me.pegbeer.filmku.dto.MovieDto
 import me.pegbeer.filmku.local.entity.MovieWithGenres
 import me.pegbeer.filmku.model.MovieDetail
 
 class MovieDetailMapper {
     companion object{
-        fun toMovieDetail(movieEntity: MovieWithGenres,movieDetailDto: MovieDetailDto):MovieDetail{
+        fun toMovieDetail(movieDetailDto: MovieDetailDto):MovieDetail{
             return MovieDetail(
-                movieEntity.movie.id,
+                movieDetailDto.id,
                 movieDetailDto.length,
-                movieEntity.movie.title,
-                movieEntity.movie.overview,
-                movieEntity.movie.posterPath,
-                movieEntity.movie.releaseDate,
-                movieEntity.movie.voteAverage,
-                movieEntity.movie.language,
-                movieEntity.genres,
-                movieDetailDto.credits.cast
+                movieDetailDto.title ?: movieDetailDto.originalTitle,
+                movieDetailDto.overview,
+                movieDetailDto.posterPath,
+                movieDetailDto.releaseDate,
+                movieDetailDto.voteAverage,
+                movieDetailDto.language,
+                movieDetailDto.videoKey,
+                movieDetailDto.genres,
+                movieDetailDto.cast
+            )
+        }
+
+        fun toMovieDetail(movieDetailDto: MovieDto):MovieDetail{
+            return MovieDetail(
+                movieDetailDto.id,
+                0,
+                movieDetailDto.title,
+                movieDetailDto.overview,
+                movieDetailDto.posterPath,
+                movieDetailDto.releaseDate,
+                movieDetailDto.voteAverage,
+                movieDetailDto.language,
+                "",
+                emptyList(),
+                emptyList()
             )
         }
     }

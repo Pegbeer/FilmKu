@@ -32,6 +32,11 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
+
+    buildFeatures{
+        viewBinding = true
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -41,8 +46,18 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.bundles.navigation)
+    implementation(libs.glide)
+    implementation(libs.apache.commons)
+    implementation(libs.threeTenABP)
+    implementation(libs.skeleton.layout)
+    implementation(libs.youtube.player)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+
     implementation(projects.data)
 }

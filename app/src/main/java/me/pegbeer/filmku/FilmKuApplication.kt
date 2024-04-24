@@ -17,6 +17,7 @@ class FilmKuApplication : Application() {
             androidLogger()
             androidContext(this@FilmKuApplication)
             modules(dataModule)
+            modules(appModule)
         }
     }
 }
